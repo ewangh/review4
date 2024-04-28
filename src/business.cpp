@@ -14,21 +14,21 @@ void getMarkData(std::vector<DateData> vec1,int candle)
     std::sort(vec1.begin(), vec1.end(), [](DateData data1, DateData data2)
               { return std::mktime(&data1.Date) < std::mktime(&data2.Date); });
 
-    DateData prevInfo;
+    DateData* prevInfo{nullptr};
 
     for (DateData &obj : vec1)
     {
-        if (prevInfo.empty())
+        if (prevInfo->empty())
         {
-            prevInfo = obj;
+            prevInfo = &obj;
             continue;
         }
 
-        obj.Closed = prevInfo.Price;
+        obj.Closed = prevInfo->Price;
         
         if(candle == -1 || obj.getCandle()==candle)
             std::cout << (candle == -1? std::to_string(obj.getCandle())+'\t':"") << std::put_time(&obj.Date, "%Y/%m/%d") << std::endl;
-        prevInfo = obj;
+        prevInfo = &obj;
     }
 }
 
